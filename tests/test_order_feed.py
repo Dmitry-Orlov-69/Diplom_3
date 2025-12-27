@@ -6,7 +6,7 @@ from pages.order_feed_page import OrderFeedPage
 from locators import BUTTON_CONSTRUCTOR, INGREDIENT_BUN_R2_D3, ORDER_MODAL, ORDER_ID_IN_MODAL, BUTTON_ORDER_FEED, ORDER_COLLECTION_FIELD, BUTTON_MAKE_ORDER
 from urls import MAIN_PAGE_URL, ORDER_FEED_PAGE_URL
 
-class OrderFeed:
+class TestOrderFeed:
     @allure.title("Переход по клику на раздел «Лента заказов»")
     def test_navigate_to_order_feed(browser):
         with allure.step("Открыть главную страницу"):

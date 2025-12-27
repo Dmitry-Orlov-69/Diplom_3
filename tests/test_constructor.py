@@ -6,7 +6,7 @@ from locators import BUTTON_CONSTRUCTOR, CLOSED_INGREDIENT_DETAILS_MODAL_BUTTON,
 from pages.main_page import MainPage
 from urls import LOGIN_URL, MAIN_PAGE_URL
 
-class Constructor:
+class TestConstructor:
     @allure.title("Переход по клику на «Конструктор»")
     def test_constructor_click(browser):
         with allure.step("Открыть страницу авторизации"):
