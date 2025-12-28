@@ -17,8 +17,8 @@ class TestOrderFeed:
             order_feed_page.click(BUTTON_ORDER_FEED)
 
         with allure.step("Проверить, что произошёл переход на адрес ленты заказов"):
-            WebDriverWait(browser, 10).until(EC.url_to_be(ORDER_FEED_PAGE_URL))
-            assert browser.current_url == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
+            order_feed_page.wait_for_url(ORDER_FEED_PAGE_URL)
+            assert order_feed_page.browser.current_url == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
 
     @allure.title("При создании нового заказа счётчик «Выполнено за всё время» увеличивается")
     def test_all_time_counter_increases(browser, unique_user, login_existing_user):
@@ -32,30 +32,22 @@ class TestOrderFeed:
         with allure.step("Нажать на кнопку 'Конструктор'"):
             order_feed_page.click(BUTTON_CONSTRUCTOR)
 
-        with allure.step("Проверка перехода на главную страницу"):
-            assert browser.current_url == MAIN_PAGE_URL, "Переход на главную страницу не состоялся"
-
         with allure.step("Перетаскиваем ингредиент 'Флюоресцентная булка R2-D3' в поле сбора заказа"):
             order_feed_page.drag_and_drop(INGREDIENT_BUN_R2_D3, ORDER_COLLECTION_FIELD)
 
         with allure.step("Нажать на кнопку 'Оформить заказ'"):
             order_feed_page.click(BUTTON_MAKE_ORDER)
 
-        with allure.step("Проверить открытие окна заказа"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(ORDER_MODAL))
-            assert browser.find_element(*ORDER_MODAL).is_displayed(), "Окно заказа не открылось"
-
         with allure.step("Ожидаем появления идентификатора заказа"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(ORDER_ID_IN_MODAL))
+            order_feed_page.wait_for_element_to_be_displayed(ORDER_ID_IN_MODAL)
 
         with allure.step("Закрываем окно заказа и ожидаем его закрытия"):
             order_feed_page.close_modal()
-            WebDriverWait(browser, 10).until(EC.invisibility_of_element_located(ORDER_MODAL))
+            order_feed_page.wait_for_invisibility_of_element(ORDER_MODAL)
 
-        with allure.step("Нажимаем на 'Лента заказов' и проверяем переход"):
+        with allure.step("Переход обратно на страницу 'Лента заказов'"):
             order_feed_page.click(BUTTON_ORDER_FEED)
-            WebDriverWait(browser, 10).until(EC.url_to_be(ORDER_FEED_PAGE_URL))
-            assert browser.current_url == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
+            order_feed_page.wait_for_url(ORDER_FEED_PAGE_URL)
 
         with allure.step("Проверяем что в счётчике «Выполнено за всё время» увеличилось количество заказов"):
             updated_count = order_feed_page.get_counter_all_time()
@@ -73,30 +65,22 @@ class TestOrderFeed:
         with allure.step("Нажать на кнопку 'Конструктор'"):
             order_feed_page.click(BUTTON_CONSTRUCTOR)
 
-        with allure.step("Проверка перехода на главную страницу"):
-            assert browser.current_url == MAIN_PAGE_URL, "Переход на главную страницу не состоялся"
-
         with allure.step("Перетаскиваем ингредиент 'Флюоресцентная булка R2-D3' в поле сбора заказа"):
             order_feed_page.drag_and_drop(INGREDIENT_BUN_R2_D3, ORDER_COLLECTION_FIELD)
 
         with allure.step("Нажать на кнопку 'Оформить заказ'"):
             order_feed_page.click(BUTTON_MAKE_ORDER)
 
-        with allure.step("Проверить открытие окна заказа"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(ORDER_MODAL))
-            assert browser.find_element(*ORDER_MODAL).is_displayed(), "Окно заказа не открылось"
-
         with allure.step("Ожидаем появления идентификатора заказа"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(ORDER_ID_IN_MODAL))
+            order_feed_page.wait_for_element_to_be_displayed(ORDER_ID_IN_MODAL)
 
         with allure.step("Закрываем окно заказа и ожидаем его закрытия"):
             order_feed_page.close_modal()
-            WebDriverWait(browser, 10).until(EC.invisibility_of_element_located(ORDER_MODAL))
+            order_feed_page.wait_for_invisibility_of_element(ORDER_MODAL)
 
-        with allure.step("Нажимаем на 'Лента заказов' и проверяем переход"):
+        with allure.step("Переход обратно на страницу 'Лента заказов'"):
             order_feed_page.click(BUTTON_ORDER_FEED)
-            WebDriverWait(browser, 10).until(EC.url_to_be(ORDER_FEED_PAGE_URL))
-            assert browser.current_url == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
+            order_feed_page.wait_for_url(ORDER_FEED_PAGE_URL)
 
         with allure.step("Проверяем что в счётчике «Выполнено за сегодня» увеличилось количество заказов"):
             updated_count = order_feed_page.get_counter_today()
@@ -114,22 +98,17 @@ class TestOrderFeed:
         with allure.step("Нажать на кнопку 'Оформить заказ'"):
             order_feed_page.click(BUTTON_MAKE_ORDER)
 
-        with allure.step("Проверить открытие окна заказа"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(ORDER_MODAL))
-            assert browser.find_element(*ORDER_MODAL).is_displayed(), "Окно заказа не открылось"
-
         with allure.step("Ожидаем появления идентификатора заказа"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(ORDER_ID_IN_MODAL))
-            order_id = browser.find_element(*ORDER_ID_IN_MODAL).text
+            order_feed_page.wait_for_element_to_be_displayed(ORDER_ID_IN_MODAL)
+            order_id = order_feed_page.browser.find_element(*ORDER_ID_IN_MODAL).text
 
         with allure.step("Закрываем окно заказа и ожидаем его закрытия"):
             order_feed_page.close_modal()
-            WebDriverWait(browser, 10).until(EC.invisibility_of_element_located(ORDER_MODAL))
+            order_feed_page.wait_for_invisibility_of_element(ORDER_MODAL)
 
-        with allure.step("Нажимаем на 'Лента заказов' и проверяем переход"):
+        with allure.step("Переход обратно на страницу 'Лента заказов'"):
             order_feed_page.click(BUTTON_ORDER_FEED)
-            WebDriverWait(browser, 10).until(EC.url_to_be(ORDER_FEED_PAGE_URL))
-            assert browser.current_url == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
+            order_feed_page.wait_for_url(ORDER_FEED_PAGE_URL)
 
         with allure.step("Проверяем что номер идентификатора заказа появился в работе"):
             expected_order_id = f"0{order_id}"

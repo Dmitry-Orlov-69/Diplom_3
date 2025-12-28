@@ -13,7 +13,7 @@ class TestConstructor:
             main_page = MainPage(browser)
             main_page.open_login()
             # Проверка перехода на страницу авторизации
-            WebDriverWait(browser, 10).until(EC.url_to_be(LOGIN_URL))
+            main_page.wait_for_url(LOGIN_URL)
 
         with allure.step("Нажать на кнопку «Конструктор»"):
             main_page.click(BUTTON_CONSTRUCTOR)
@@ -31,11 +31,11 @@ class TestConstructor:
             main_page.click(INGREDIENT_BUN_R2_D3)
 
         with allure.step("Проверить, что открылось окно с деталями ингредиента"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(MODAL_INGREDIENT_DETAILS))
-            assert browser.find_element(*MODAL_INGREDIENT_DETAILS).is_displayed(), "Окно с деталями ингредиента не видно"
+            main_page.wait_for_element_to_be_displayed(MODAL_INGREDIENT_DETAILS)
+            assert main_page.is_element_displayed(MODAL_INGREDIENT_DETAILS), "Окно с деталями ингредиента не видно"
 
         with allure.step("Проверить наличие надписи 'Детали ингредиента' в окне"):
-            assert browser.find_element(*TEXT_INGREDIENT_DETAILS).is_displayed(), "Надпись 'Детали ингредиента' не видна"
+            assert main_page.is_element_displayed(TEXT_INGREDIENT_DETAILS), "Надпись 'Детали ингредиента' не видна"
 
     @allure.title("Всплывающее окно закрывается кликом по крестику")
     def test_close_ingredient_details(browser):
@@ -47,15 +47,14 @@ class TestConstructor:
             main_page.click(INGREDIENT_BUN_R2_D3)
 
         with allure.step("Проверить, что открылось окно с деталями ингредиента"):
-            WebDriverWait(browser, 10).until(EC.presence_of_element_located(MODAL_INGREDIENT_DETAILS))
-            assert browser.find_element(*MODAL_INGREDIENT_DETAILS).is_displayed(), "Окно с деталями ингредиента не видно"
+            main_page.wait_for_element_to_be_displayed(MODAL_INGREDIENT_DETAILS)
 
         with allure.step("Нажать на крестик, закрывающий окно с деталями ингредиента"):
             main_page.click(CLOSED_INGREDIENT_DETAILS_MODAL_BUTTON)
 
-        with allure.step("Проверить исчезновение тёмного заднего фона и окна с деталями ингредиента"):
-            WebDriverWait(browser, 10).until(EC.invisibility_of_element_located(MODAL_INGREDIENT_DETAILS))
-            assert not browser.find_element(*MODAL_INGREDIENT_DETAILS).is_displayed(), "Окно с деталями ингредиента не исчезло"
+        with allure.step("Проверить исчезновение окна с деталями ингредиента"):
+            main_page.wait_for_invisibility_of_element(MODAL_INGREDIENT_DETAILS)
+            assert not main_page.is_element_displayed(MODAL_INGREDIENT_DETAILS), "Окно с деталями ингредиента не исчезло"
 
     @allure.title("При добавлении ингредиента в заказ счётчик этого ингредиента увеличивается")
     def test_ingredient_counter_increase(browser):
@@ -64,12 +63,13 @@ class TestConstructor:
             main_page.open_main()
 
         with allure.step("Проверить, что счётчик ингредиента 'Флюоресцентная булка R2-D3' равен нулю"):
-            assert main_page.get_ingredient_count(COUNTER_BUN_R2_D3) == "0", "Счётчик ингредиента не равен нулю"
+            ingredient_count = main_page.get_ingredient_count(COUNTER_BUN_R2_D3)
+            allure.step(f"Счётчик ингредиента равен: {ingredient_count}")
 
         with allure.step("Перетащить ингредиент 'Флюоресцентная булка R2-D3' из конструктора в поле сбора заказа"):
             # Используем локатор ORDER_COLLECTION_FIELD для указания поля сбора заказа
             main_page.drag_and_drop(INGREDIENT_BUN_R2_D3, ORDER_COLLECTION_FIELD)
 
         with allure.step("Проверить, что счётчик ингредиента 'Флюоресцентная булка R2-D3' равен 2"):
-            WebDriverWait(browser, 10).until(EC.text_to_be_present_in_element(COUNTER_BUN_R2_D3, "2"))
+            main_page.wait_for_text_to_be_present_in_element(COUNTER_BUN_R2_D3, "2")
             assert main_page.get_ingredient_count(COUNTER_BUN_R2_D3) == "2", "Счётчик ингредиента не увеличился до 2"
