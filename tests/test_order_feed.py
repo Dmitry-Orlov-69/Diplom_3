@@ -1,10 +1,7 @@
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from pages.order_feed_page import OrderFeedPage
 from locators import BUTTON_CONSTRUCTOR, INGREDIENT_BUN_R2_D3, ORDER_MODAL, ORDER_ID_IN_MODAL, BUTTON_ORDER_FEED, ORDER_COLLECTION_FIELD, BUTTON_MAKE_ORDER
-from urls import MAIN_PAGE_URL, ORDER_FEED_PAGE_URL
+from urls import ORDER_FEED_PAGE_URL
 
 class TestOrderFeed:
     @allure.title("Переход по клику на раздел «Лента заказов»")
@@ -18,7 +15,7 @@ class TestOrderFeed:
 
         with allure.step("Проверить, что произошёл переход на адрес ленты заказов"):
             order_feed_page.wait_for_url(ORDER_FEED_PAGE_URL)
-            assert order_feed_page.browser.current_url == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
+            assert order_feed_page.get_current_url() == ORDER_FEED_PAGE_URL, "Переход на страницу 'Лента заказов' не состоялся"
 
     @allure.title("При создании нового заказа счётчик «Выполнено за всё время» увеличивается")
     def test_all_time_counter_increases(browser, unique_user, login_existing_user):

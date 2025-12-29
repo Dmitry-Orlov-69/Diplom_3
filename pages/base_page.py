@@ -30,3 +30,6 @@ class BasePage:
         """Прокрутить до элемента."""
         element = self.wait.until(EC.presence_of_element_located(locator))
         self.browser.execute_script("arguments[0].scrollIntoView();", element)
+
+    def get_current_url(self):
+        return self.browser.current_url

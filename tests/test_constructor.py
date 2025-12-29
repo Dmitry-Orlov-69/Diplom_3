@@ -1,7 +1,4 @@
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from locators import BUTTON_CONSTRUCTOR, CLOSED_INGREDIENT_DETAILS_MODAL_BUTTON, COUNTER_BUN_R2_D3, INGREDIENT_BUN_R2_D3, MODAL_INGREDIENT_DETAILS, ORDER_COLLECTION_FIELD, TEXT_INGREDIENT_DETAILS
 from pages.main_page import MainPage
 from urls import LOGIN_URL, MAIN_PAGE_URL
@@ -19,7 +16,7 @@ class TestConstructor:
             main_page.click(BUTTON_CONSTRUCTOR)
 
         with allure.step("Проверить переход на главную страницу с конструктором"):
-            assert browser.current_url == MAIN_PAGE_URL, "Переход в Конструктор не произошёл"
+            assert main_page.get_current_url() == MAIN_PAGE_URL, "Переход в Конструктор не произошёл"
 
     @allure.title("Если кликнуть на ингредиент, появится всплывающее окно с деталями")
     def test_ingredient_details(browser):
